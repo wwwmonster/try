@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>AGI String Operation</title>
+    <style>
+        .result-true { color: green; font-weight: bold; }
+        .result-false { color: red; font-weight: bold; }
+        .result-text { color: blue; font-weight: bold; }
+        .error { color: red; font-style: italic; }
+    </style>
+    <script>
+        function toggleInput2(selectElement) {
+            const input2 = document.getElementById('input2');
+            const op = selectElement.value;
+            if (op === 'is palindrome' || op === 'inflationary' || op === 'fizz buzz') {
+                input2.disabled = true;
+                input2.value = '';
+            } else {
+                input2.disabled = false;
+            }
+        }
+        window.onload = function() {
+            const operationSelect = document.getElementById('operation');
+            toggleInput2(operationSelect);
+            operationSelect.addEventListener('change', function() {
+                toggleInput2(this);
+            });
+        }
+    </script>
+</head>
+<body>
+<h1>String Operation</h1>
+<form action="/process" method="post" th:object="${request}" onsubmit="return validateForm()">
+    Operation:
+    <select id="operation" th:field="*{operation}">
+        <option value="are same csvs">Are Same CSVs</option>
+        <option value="csv union">CSV Union</option>
+        <option value="csv intersection">CSV Intersection</option>
+        <option value="are anagrams">Are Anagrams</option>
+        <option value="is palindrome">Is Palindrome</option>
+        <option value="spoonerism">Spoonerism</option>
+        <option value="inflationary">Inflationary</option>
+        <option value="fizz buzz">Fizz Buzz</option>
+    </select><br/><br/>
+    Input 1: <input type="text" th:field="*{input1}" id="input1" required/><br/><br/>
+    Input 2: <input type="text" id="input2" th:field="*{input2}" required/><br/><br/>
+    <button type="submit">Submit</button><br/>
+</form><br/>
+<div th:if="${result != null}">
+    <strong>Result:</strong>
+    <span th:text="${result}"
+          th:classappend="${result.equals('true')} ? 'result-true' : (${result.equals('false') || result.equals('Invalid number')} ? 'result-false' : 'result-text')">
+    </span>
+</div>
+<script>
+    function validateForm() {
+        const input1 = document.getElementById("input1").value.trim();
+        const input2 = document.getElementById("input2").value.trim();
+        const operation = document.getElementById("operation").value;
+        if (!input1) {
+            alert("Input 1 is required.");
+            return false;
+        }
+        if (operation !== "is palindrome" && operation !== 'inflationary' && operation !== "fizz buzz" && !input2) {
+            alert("Input 2 is required for this operation.");
+            return false;
+        }
+        return true;
+    }
+</script>
+</body>
+</html>
