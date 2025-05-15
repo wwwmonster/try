@@ -19,4 +19,5 @@ public enum OperationType {
     public String getLabel() {
         return label;
     }
+
 }
